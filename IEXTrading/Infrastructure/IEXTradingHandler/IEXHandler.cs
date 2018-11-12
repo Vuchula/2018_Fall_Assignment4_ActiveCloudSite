@@ -20,6 +20,28 @@ namespace IEXTrading.Infrastructure.IEXTradingHandler
             httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
         }
 
+        public List<Company> GetComp(int skip, int take)
+        {
+            string IEXTrading_API_PATH = BASE_URL + "ref-data/symbols";
+            string companyList = "";
+
+            List<Company> companies = null;
+
+            httpClient.BaseAddress = new Uri(IEXTrading_API_PATH);
+            HttpResponseMessage response = httpClient.GetAsync(IEXTrading_API_PATH).GetAwaiter().GetResult();
+            if (response.IsSuccessStatusCode)
+            {
+                companyList = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            }
+
+            if (!companyList.Equals(""))
+            {
+                companies = JsonConvert.DeserializeObject<List<Company>>(companyList);
+                companies = companies.GetRange(skip, take);
+            }
+            return companies;
+        }
+
         /****
          * Calls the IEX reference API to get the list of symbols. 
         ****/

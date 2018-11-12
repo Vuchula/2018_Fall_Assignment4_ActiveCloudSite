@@ -29,20 +29,27 @@ namespace MVCTemplate.Controllers
         /****
          * The Symbols action calls the GetSymbols method that returns a list of Companies.
          * This list of Companies is passed to the Symbols View.
-         * Comment test
         ****/
         public IActionResult Symbols()
         {
-            //Set ViewBag variable first
-            ViewBag.dbSucessComp = 0;
-            IEXHandler webHandler = new IEXHandler();
-            List<Company> companies = webHandler.GetSymbols();
+            ////Set ViewBag variable first
+            //ViewBag.dbSucessComp = 0;
+            //IEXHandler webHandler = new IEXHandler();
+            //List<Company> companies = webHandler.GetSymbols();
 
-            //Save comapnies in TempData
-            TempData["Companies"] = JsonConvert.SerializeObject(companies);
+            ////Save comapnies in TempData
+            //TempData["Companies"] = JsonConvert.SerializeObject(companies);
 
-            return View(companies);
+            //return View(companies);
+
+            return View();
         }
+
+        public IActionResult TopStocks()
+        {
+            return View();
+        }
+
 
         /****
          * The Chart action calls the GetChart method that returns 1 year's equities for the passed symbol.
@@ -82,22 +89,41 @@ namespace MVCTemplate.Controllers
         /****
          * Saves the Symbols in database.
         ****/
-        public IActionResult PopulateSymbols()
+        [HttpPost]
+        public void PopulateSymbols(Company company)
         {
-            List<Company> companies = JsonConvert.DeserializeObject<List<Company>>(TempData["Companies"].ToString());
-            foreach (Company company in companies)
+            //List<Company> companies = JsonConvert.DeserializeObject<List<Company>>(TempData["Companies"].ToString());
+
+
+            //Database will give PK constraint violation error when trying to insert record with existing PK.
+            //So add company only if it doesnt exist, check existence using symbol (PK)
+            if (dbContext.Companies.Where(c => c.symbol.Equals(company.symbol)).Count() == 0)
             {
-                //Database will give PK constraint violation error when trying to insert record with existing PK.
-                //So add company only if it doesnt exist, check existence using symbol (PK)
-                if (dbContext.Companies.Where(c => c.symbol.Equals(company.symbol)).Count() == 0)
-                {
-                    dbContext.Companies.Add(company);
-                }
+                dbContext.Companies.Add(company);
             }
             dbContext.SaveChanges();
-            ViewBag.dbSuccessComp = 1;
-            return View("Symbols", companies);
         }
+
+
+        /****
+         * Saves the Symbols in database.
+        ****/
+        //public IActionResult PopulateSymbols()
+        //{
+        //    List<Company> companies = JsonConvert.DeserializeObject<List<Company>>(TempData["Companies"].ToString());
+        //    foreach (Company company in companies)
+        //    {
+        //        //Database will give PK constraint violation error when trying to insert record with existing PK.
+        //        //So add company only if it doesnt exist, check existence using symbol (PK)
+        //        if (dbContext.Companies.Where(c => c.symbol.Equals(company.symbol)).Count() == 0)
+        //        {
+        //            dbContext.Companies.Add(company);
+        //        }
+        //    }
+        //    dbContext.SaveChanges();
+        //    ViewBag.dbSuccessComp = 1;
+        //    return View("Symbols", companies);
+        //}
 
         /****
          * Saves the equities in database.
@@ -121,6 +147,11 @@ namespace MVCTemplate.Controllers
             CompaniesEquities companiesEquities = getCompaniesEquitiesModel(equities);
 
             return View("Chart", companiesEquities);
+        }
+
+        public IActionResult SelfReflection()
+        {
+            return View();
         }
 
         /****

@@ -1,52 +1,67 @@
 ﻿@model IEnumerable<IEXTrading.Models.Company>
+@{
+    ViewData["Title"] = "Symbols";
+}
 
-<h2>Symbols</h2>
-<hr />
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Symbol
-            </th>
-            <th>
-                Name
-            </th>
-            <th>
-                Date
-            </th>
-            <th>
-                Type
-            </th>
-        </tr>
-    </thead>
-
-    <tbody>
-
-        @foreach (var item in Model)
-        {
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Symbols</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css" />
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+    <script type="text/javascript">
+        //$(document).ready(function () {
+        //    $('#tblSymbols').dataTable();
+        //});
+    </script>
+</head>
+<body>
+    <h2>Symbols</h2>
+    <hr />
+    <table class="table" id="tblSymbols">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.symbol)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.date)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.type)
-                </td>
+                <th align="left">
+                    Symbol
+                </th>
+                <th align="left">
+                    Name
+                </th>
+                <th align="left">
+                    Date
+                </th>
+                <th align="left">
+                    Type
+                </th>
             </tr>
-        }
-        <tr>
-            <td>
-                <a id="dbopt" asp-controller="Home" asp-action="PopulateSymbols"><img src="~/images/button_save-data.png" /></a>
-            </td>
-        </tr>
-    </tbody>
-</table>
+        </thead>
+        <tbody id="symbolsTableBody" style="background-color:#CFC493">
+            @*@foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.symbol)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.date)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.type)
+                        </td>
+                    </tr>
+                }*@
+
+        </tbody>
+    </table>
+    <a id="dbopt"><img src="~/images/button_save-data.png" /></a>
+    <script type="text/javascript" src="~/js/Home/symbols.js"></script>
+</body>
+</html>
+
 <script>
     alertDbSave(@ViewBag.dbSuccessComp);
 </script>
