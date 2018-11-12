@@ -29,6 +29,7 @@ namespace MVCTemplate.Controllers
         /****
          * The Symbols action calls the GetSymbols method that returns a list of Companies.
          * This list of Companies is passed to the Symbols View.
+         * 
         ****/
         public IActionResult Symbols()
         {
